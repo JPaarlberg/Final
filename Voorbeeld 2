@@ -1,0 +1,60 @@
+aantalkluizen = 12
+
+def toon_aantal_kluizen_vrij(aantalkluizen):
+    file = open('fa_kluizen.txt','r')
+    aantalKluizenBezet = len(file.readlines())
+    aantalVrijeKluizen = aantalkluizen - aantalKluizenBezet
+    return aantalVrijeKluizen
+
+def nieuwe_kluis():
+    kluisnummers = [1,2,3,4,5,6,7,8,9,10,11,12]
+    file = open('fa_kluizen.txt','r+')
+    bezet = []
+    for i in file:
+        kluis = i[0] + i[1]
+        bezet.append(int(kluis.strip(';')))
+
+    for i in bezet:
+        if len(bezet) == 12:
+            return 'Alle kluizen zijn bezet!'
+        else:
+            kluisnummers.remove(i)
+
+    if len(kluisnummers) == 0:
+        return 'Alle kluizen zijn bezet!'
+    else:
+        wachtwoord = input('Vul een wachtwoord in:')
+        file.write('{}:{}\n'.format(kluisnummers[0], wachtwoord))
+        file.close()
+        return 'Uw toegewezen kluisnummer is: {}'.format(kluisnummers[0])
+
+def kluis_openen():
+    kluisnummer = str(input('Geef uw kluisnummer:'))
+    kluiswachtwoord = str(input('Geef uw wachtwoord:'))
+    combinatie = ('{}:{}\n'.format(kluisnummer, kluiswachtwoord))
+    file = open('kluizen.txt','r+')
+    kluizen = file.readlines()
+    gevonden = False
+    for i in kluizen:
+        if combinatie == i:
+            return 'Uw kluiscombinatie is incorrect, probeer het nog eens.'
+        if gevonden == False:
+            return 'Uw kluis is geopend'
+
+def showMenu():
+    print('1: Ik wil weten hoeveel kluizen nog vrij zijn')
+    print('2: Ik wil een nieuwe kluis')
+    print('3: Ik wil even iets uit mijn kluis halen ')
+    print('4: Ik geef mijn kluis terug')
+
+    keuze = int(input('kies optie 1, 2, 3 of 4:'))
+    if keuze == 1:
+        print(toon_aantal_kluizen_vrij(aantalkluizen))
+    elif keuze == 2:
+        print(nieuwe_kluis())
+    elif keuze == 3:
+        print(kluis_openen())
+    else:
+        print('Helaas.. Kies uit de cijfers 1 tot 4!')
+
+showMenu()
